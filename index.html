@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#152449">
+<title>푸른 AI 코디 V1.0.0</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#24324a;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;line-height:1.5}
+header{background:#152449;color:#fff;padding:16px}header>div{max-width:680px;margin:auto;display:flex;align-items:center;justify-content:space-between}
+header strong{font-size:20px}header small{display:block;color:#c2cce2}main{max-width:680px;margin:16px auto;padding:0 14px 28px;display:grid;gap:14px}
+section{border:1px solid #e1e7f2;border-radius:17px;padding:18px;background:#fff;box-shadow:0 3px 15px #14295308}
+h1{font-size:23px;margin:0 0 8px}h2{font-size:18px;margin:0 0 13px}.sub{color:#687792;font-size:13px}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #94b4ff;outline-offset:2px}
+#settingsBtn{background:#33466d;border:1px solid #64769a;border-radius:12px;color:white;width:45px;height:45px;font-size:20px}
+.upload{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;min-height:155px;background:#f5f8ff;border:2px dashed #b1c4e8;border-radius:13px;text-align:center;cursor:pointer;padding:12px}
+.upload input{position:absolute;opacity:0;width:1px;height:1px}.upload strong{font-size:15px}.upload img{display:none;max-width:100%;max-height:260px;object-fit:contain;border-radius:9px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label.field{display:grid;gap:6px;font-size:14px;font-weight:650}
+select,input[type=password]{width:100%;padding:12px;background:#fff;border:1px solid #cdd6e7;border-radius:10px;color:#24324a;min-height:45px}
+.primary{width:100%;min-height:51px;background:#3b66ed;color:white;border:0;border-radius:13px;font-weight:800;margin-top:16px}
+.secondary{border:1px solid #c3d2ec;background:#f6f8fe;color:#2853ab;border-radius:10px;padding:10px 13px}
+#status{min-height:25px;color:#3f62a9;font-size:13px;margin:10px 0 0}#results{display:none}
+.look{border:1px solid #e0e7f2;border-radius:13px;background:#fcfdff;padding:14px;margin:12px 0}
+.look h3{margin:0 0 8px;font-size:16px}.look p{margin:5px 0;font-size:14px}
+.note{font-size:13px;color:#62708a}.modalwrap{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;background:#07152ab8;padding:14px}
+.modalwrap.show{display:flex}.modal{background:white;padding:20px;border-radius:16px;width:min(100%,450px);max-height:90dvh;overflow:auto}
+.modalHead{display:flex;justify-content:space-between;align-items:center}.modalHead h2{margin:0}
+#close{border:0;background:#eef1f6;border-radius:8px;font-size:20px;width:38px;height:38px}
+.warning{background:#fff7e5;padding:10px;border-radius:10px;font-size:12px;color:#71501f}
+#version{display:block;width:100%;text-align:center;border:1px solid #dae4f5;border-radius:12px;padding:14px;margin-top:17px;background:#f4f7fb;font-size:21px;font-weight:800}
+#devmenu{display:none;padding:13px;background:#eaf1ff;border-radius:12px;margin-top:12px}#devmenu.show{display:block}
+#devmenu a{display:block;background:#265bc0;border-radius:10px;color:white;padding:12px;text-align:center;text-decoration:none;font-weight:750}
+footer{text-align:center;padding:5px 14px 27px;color:#8694a9;font-size:12px}
+@media(max-width:350px){.grid{grid-template-columns:1fr}section{padding:14px}}
+</style>
+</head>
+<body>
+<header><div><div><strong>푸른 AI 코디</strong><small>내 사진과 상황에 맞는 옷차림 제안</small></div><button id="settingsBtn" aria-label="설정 열기">⚙</button></div></header>
+<main>
+<section><h1>오늘 어떤 코디가 좋을까요?</h1><p class="sub">사진은 선택 사항입니다. Gemini API 키가 없을 때는 예시 추천으로 화면을 미리 확인할 수 있습니다.</p></section>
+<section><h2>① 사진 선택</h2><label class="upload" for="photo">
+<img id="preview" alt="선택한 사진 미리보기"><span id="camera" style="font-size:33px">📷</span><strong id="photoText">사진 촬영 또는 갤러리 선택</strong><span class="sub">사진은 크기를 줄여 추천 시에만 AI로 전송합니다.</span>
+<input type="file" id="photo" accept="image/*"></label><button id="removePhoto" class="secondary" style="display:none;margin-top:9px" type="button">사진 지우기</button></section>
+<section><h2>② 계절과 스타일</h2><div class="grid">
+<label class="field">계절<select id="season"><option>봄</option><option>여름</option><option selected>가을</option><option>겨울</option></select></label>
+<label class="field">스타일<select id="style"><option>깔끔한 캐주얼</option><option>비즈니스</option><option>미니멀</option><option>편안한 데일리</option><option>스포티</option></select></label>
+<label class="field">상황<select id="occasion"><option>일상</option><option>출근·업무</option><option>모임</option><option>여행</option><option>데이트</option></select></label>
+<label class="field">날씨<select id="weather"><option>보통</option><option>더움</option><option>쌀쌀함</option><option>추움</option><option>비</option></select></label></div>
+<button id="go" class="primary">✨ 코디 3가지 추천받기</button><p id="status" aria-live="polite">설정에서 Gemini API 키를 입력하면 AI 추천을 시작할 수 있습니다.</p></section>
+<section id="results"><h2 id="resultTitle">추천 코디 3가지</h2><div id="cards"></div><p id="resultNote" class="note"></p></section>
+</main>
+<footer>푸른 AI 코디 · V1.0.0 · 별도 사진 서버 저장 없음</footer>
+<div class="modalwrap" id="backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+<div class="modalHead"><h2 id="settingsTitle">설정</h2><button id="close" aria-label="설정 닫기">×</button></div>
+<p><label class="field">Gemini API 키<input type="password" id="key" placeholder="Google AI Studio API 키" autocomplete="off"></label></p>
+<p class="sub">입력한 API 키는 현재 탭 메모리에만 보관하며 파일이나 브라우저 저장소에 저장하지 않습니다.</p>
+<p class="warning">개인 테스트용입니다. 브라우저에서 API 키로 직접 호출하므로 공개 서비스에서는 서버를 통한 키 보호가 필요합니다. Gemini 무료 한도와 과금 설정을 확인하세요.</p>
+<button id="clear" class="secondary" style="width:100%">API 키 지우기</button>
+<button id="version" type="button">V1.0.0<span class="sub" style="display:block;font-weight:400">앱 버전</span></button>
+<div id="devmenu"><strong>개발자 메뉴</strong><p class="sub">GitHub에 로그인한 후 코디 앱 파일을 업로드합니다.</p><a href="https://github.com/lsc571-max/ai-fashion-stylist/upload/main" target="_blank" rel="noopener noreferrer">GitHub HTML 업로드</a><p class="sub">버전 5회 터치는 숨김 메뉴일 뿐 보안 인증이 아닙니다.</p></div>
+</div></div>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+let photo="",serial=0,key="",busy=false,taps=0,lastTap=0;const cache=new Map();
+const back=$("backdrop");
+$("settingsBtn").onclick=()=>{back.classList.add("show");$("key").value=key;};
+$("close").onclick=()=>back.classList.remove("show");
+back.onclick=e=>{if(e.target===back)back.classList.remove("show");};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")back.classList.remove("show");});
+$("key").oninput=e=>key=e.target.value.trim();
+$("clear").onclick=()=>{key="";$("key").value="";cache.clear();};
+$("version").onclick=()=>{const now=Date.now();taps=now-lastTap<1700?taps+1:1;lastTap=now;if(taps>=5){$("devmenu").classList.toggle("show");taps=0;}};
+function status(s,err){$("status").textContent=s;$("status").style.color=err?"#b03a3a":"#3f62a9";}
+const read=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>no(Error("사진을 읽지 못했습니다."));r.readAsDataURL(f);});
+const resize=url=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>{try{const k=Math.min(1,1024/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",0.78));}catch(e){no(e);}};im.onerror=()=>no(Error("지원되지 않는 이미지입니다."));im.src=url;});
+$("photo").onchange=async e=>{const f=e.target.files[0];if(!f)return;
+if(!f.type.startsWith("image/")||f.size>20*1024*1024){status("20MB 이하 이미지 파일을 선택해 주세요.",true);return;}
+try{status("사진 준비 중…");photo=await resize(await read(f));serial++;cache.clear();$("preview").src=photo;$("preview").style.display="block";$("camera").style.display="none";$("photoText").textContent="다른 사진 선택";$("removePhoto").style.display="inline-block";status("사진이 준비됐습니다.");}catch(err){status(err.message,true);}};
+$("removePhoto").onclick=()=>{photo="";serial++;cache.clear();$("photo").value="";$("preview").removeAttribute("src");$("preview").style.display="none";$("camera").style.display="block";$("photoText").textContent="사진 촬영 또는 갤러리 선택";$("removePhoto").style.display="none";status("사진을 지웠습니다.");};
+const item=(tag,txt,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;};
+function line(card,title,value){if(!value)return;const p=item("p");p.append(item("strong",title+"  "),document.createTextNode(String(value)));card.append(p);}
+function show(data,demo){if(!Array.isArray(data.outfits)||data.outfits.length<3)throw Error("AI의 추천 형식을 처리하지 못했습니다.");
+$("resultTitle").textContent=demo?"예시 코디 3가지":"AI 추천 코디 3가지";$("cards").replaceChildren();
+data.outfits.slice(0,3).forEach((o,i)=>{const c=item("article",null,"look");c.append(item("h3",(i+1)+". "+(o.name||"추천 스타일")));line(c,"상의",o.top);line(c,"하의",o.bottom);line(c,"겉옷",o.outer);line(c,"신발",o.shoes);line(c,"색 조합",o.colors);line(c,"이유",o.why);$("cards").append(c);});
+$("resultNote").textContent=(data.note||"")+(demo?" · 이 결과는 사진을 AI로 분석한 내용이 아닌 예시입니다.":"");
+$("results").style.display="block";$("results").scrollIntoView({behavior:"smooth",block:"start"});}
+function sample(season,style,occasion,weather){const cold=season==="겨울"||weather==="추움"||weather==="쌀쌀함",hot=season==="여름"||weather==="더움";
+return{outfits:[
+{name:"단정한 기본 조합",top:hot?"아이보리 반팔 셔츠":"아이보리 니트",bottom:"네이비 슬랙스",outer:cold?"가벼운 코트":"얇은 재킷",shoes:"흰색 스니커즈",colors:"아이보리 · 네이비",why:"활용도 높은 기본색을 사용합니다."},
+{name:"깔끔한 업무 스타일",top:hot?"하늘색 셔츠":"연청색 셔츠",bottom:"차콜 슬랙스",outer:cold?"네이비 블레이저":"가벼운 블레이저",shoes:"로퍼",colors:"블루 · 차콜",why:"단정하고 부담스럽지 않은 조합입니다."},
+{name:"편안한 일상 스타일",top:hot?"회색 티셔츠":"그레이 맨투맨",bottom:"진청 데님",outer:cold?"경량 패딩":"캐주얼 셔츠",shoes:"심플한 스니커즈",colors:"그레이 · 인디고",why:"활동성과 편안함을 우선합니다."}
+],note:season+" / "+style+" / "+occasion+" / "+weather+" 기준 예시"};}
+async function gemini(season,style,occasion,weather){const prompt="한국어 실용 패션 코디 전문가로서 계절 "+season+", 스타일 "+style+", 상황 "+occasion+", 날씨 "+weather+"에 맞는 서로 다른 코디 3가지를 추천하세요. "+
+(photo?"사진에서 확인되는 옷과 색상만 참고하고 나이·성별·건강 등 개인 특성은 추측하지 마세요. ":"사진이 없으니 일반적인 조합을 추천하세요. ")+
+"JSON 객체 하나만 출력. 정확히 outfits 배열에 3개의 객체, 각 객체는 name,top,bottom,outer,shoes,colors,why 문자열 속성을 가지고 note 문자열 하나를 추가하세요. 과장 없이 실제 입을 수 있는 조합으로 추천하세요.";
+const parts=[{text:prompt}];if(photo)parts.push({inlineData:{mimeType:"image/jpeg",data:photo.split(",")[1]}});
+const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),45000);
+try{const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify({contents:[{role:"user",parts}],generationConfig:{responseMimeType:"application/json"}}),signal:controller.signal});
+const j=await r.json().catch(()=>({}));if(!r.ok)throw Error("API 오류 "+r.status+": "+(j.error&&j.error.message||"API 키나 사용량을 확인하세요."));
+const s=(j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts||[]).map(p=>p.text||"").join("");
+if(!s)throw Error("Gemini 응답이 없습니다.");return JSON.parse(s);
+}finally{clearTimeout(timeout);}}
+$("go").onclick=async()=>{if(busy)return;busy=true;$("go").disabled=true;$("go").textContent="추천 생성 중…";
+const season=$("season").value,style=$("style").value,occasion=$("occasion").value,weather=$("weather").value;
+const ck=[serial,season,style,occasion,weather,key?"ai":"demo"].join("|");status(key?"Gemini가 코디를 추천하는 중입니다.":"예시 코디를 불러옵니다.");
+try{let data=cache.get(ck);if(!data){data=key?await gemini(season,style,occasion,weather):sample(season,style,occasion,weather);cache.set(ck,data);}show(data,!key);status(key?"AI 추천 완료. 동일 조건은 다시 API를 호출하지 않습니다.":"예시 추천입니다. 설정에서 API 키를 입력하면 실제 AI 분석을 사용할 수 있습니다.");}
+catch(e){status(e.name==="AbortError"?"요청 시간이 초과됐습니다.":e.message,true);}finally{busy=false;$("go").disabled=false;$("go").textContent="✨ 코디 3가지 추천받기";}};
+})();
+</script>
+</body></html>
