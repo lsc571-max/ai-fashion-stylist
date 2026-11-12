@@ -1,0 +1,33 @@
+{
+  "id": "/ai-fashion-stylist/",
+  "name": "푸른 AI 패션 스타일리스트",
+  "short_name": "푸른 AI 코디",
+  "description": "나에게 어울리는 AI 코디 추천과 가상 피팅",
+  "lang": "ko",
+  "start_url": "/ai-fashion-stylist/",
+  "scope": "/ai-fashion-stylist/",
+  "display": "standalone",
+  "background_color": "#f2f5fa",
+  "theme_color": "#13234a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
