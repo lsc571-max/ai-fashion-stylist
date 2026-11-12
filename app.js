@@ -154,13 +154,14 @@ $("saveComposite").onclick=async()=>{try{const img=await composite();await saveF
 function date(t){return new Date(t).toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})}
 async function renderHistory(){const grid=$("historyGrid");grid.replaceChildren();let records=(await all()).filter(x=>x.id!==PROFILE).sort((a,b)=>b.createdAt-a.createdAt);
 if(!records.length){const d=document.createElement("p");d.className="empty";d.textContent="저장된 코디 기록이 없습니다.";grid.append(d);return}
-for(const r of records){const c=document.createElement("button");c.className="historyCard";const img=document.createElement("img");img.src=r.fit||r.portrait||"";img.alt="저장된 코디 사진";const info=document.createElement("div");info.className="info";info.textContent=date(r.createdAt)+"\n"+(r.options?.season||"")+" · "+(r.options?.style||"")+"\n"+(r.kind==="fitting"?"이미지":"코디 추천");c.append(img,info);c.onclick=()=>openRecord(r);grid.append(c)}}
+for(const r of records){const c=document.createElement("button");c.className="historyCard";const img=document.createElement("img");img.src=r.fit||r.portrait||"";img.alt="저장된 코디 사진";const info=document.createElement("div");info.className="info";info.textContent=date(r.createdAt)+"\n"+(r.options?.season||"")+" · "+(r.options?.style||"")+"\n"+(r.kind==="fitting"?"이미지":"코디 추천");c.append(img,info);c.onclick=()=>openRecord(r);const wrap=document.createElement("div");wrap.append(c);
+const del=document.createElement("button");del.className="btn danger full";del.type="button";del.textContent="기록 삭제";del.onclick=async()=>{if(!confirm("이 기록을 삭제하시겠습니까?"))return;await remove(r.id);await renderHistory();notify("기록을 삭제했습니다.")};wrap.append(del);grid.append(wrap)}}
 async function showHistory(){$("galleryPanel").hidden=false;await renderHistory();$("galleryPanel").scrollIntoView({behavior:"smooth",block:"start"})}
 $("historyBtn").onclick=showHistory;$("closeHistory").onclick=()=>$("galleryPanel").hidden=true;
 async function openRecord(r){if(!r)return;
 setOptions(r.options);state.portrait=r.portrait||"";state.face=r.face||"";showPhotos();if(r.outfits?.length){render(r.outfits,!!r.demo);state.selected=r.selected||0;$("shareLook").value=String(state.selected)}
 if(r.fit){state.fit=r.fit;state.subject=r.fit;showFit(date(r.createdAt)+" · "+(r.source||"저장된 결과"));$("editorPanel").hidden=true;}
-if(confirm("이 기록을 삭제하시겠습니까?\n\n취소를 누르면 기록만 열고 유지합니다.")){await remove(r.id);await renderHistory();notify("선택한 기록을 삭제했습니다.")}}
+$("galleryPanel").hidden=true;notify("저장된 기록을 불러왔습니다.")}
 $("backupBtn").onclick=async()=>{try{const list=await all();download("data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify({app:"pureun-fashion-v3",version:1,createdAt:Date.now(),records:list})),"pureun-fashion-v3-backup-"+Date.now()+".json");msg("saveStatus","백업 파일을 다운로드했습니다. 스마트폰 외에도 안전하게 보관하세요.")}catch(e){msg("saveStatus",explain(e),true)}};
 $("restoreBtn").onclick=()=>$("restoreFile").click();
 $("restoreFile").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const data=JSON.parse(await f.text());if(data.app!=="pureun-fashion-v3"||!Array.isArray(data.records))throw Error("V3 백업 파일이 아닙니다.");if(data.records.length>400)throw Error("백업 건수가 너무 많습니다.");
