@@ -1,247 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#152449">
-<title>푸른 AI 코디 V2</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#24324a;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;line-height:1.5}
-header{background:#152449;color:#fff;padding:16px}header>div{max-width:680px;margin:auto;display:flex;align-items:center;justify-content:space-between}
-header strong{font-size:20px}header small{display:block;color:#c2cce2}main{max-width:680px;margin:16px auto;padding:0 14px 28px;display:grid;gap:14px}
-section{border:1px solid #e1e7f2;border-radius:17px;padding:18px;background:#fff;box-shadow:0 3px 15px #14295308}
-h1{font-size:23px;margin:0 0 8px}h2{font-size:18px;margin:0 0 13px}.sub{color:#687792;font-size:13px}
-button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.6;cursor:wait}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #94b4ff;outline-offset:2px}
-#settingsBtn{background:#33466d;border:1px solid #64769a;border-radius:12px;color:white;width:45px;height:45px;font-size:20px}
-.upload{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;min-height:155px;background:#f5f8ff;border:2px dashed #b1c4e8;border-radius:13px;text-align:center;cursor:pointer;padding:12px}
-.upload input{position:absolute;opacity:0;width:1px;height:1px}.upload strong{font-size:15px}.upload img{display:none;max-width:100%;max-height:260px;object-fit:contain;border-radius:9px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}label.field{display:grid;gap:6px;font-size:14px;font-weight:650}
-select,input[type=password]{width:100%;padding:12px;background:#fff;border:1px solid #cdd6e7;border-radius:10px;color:#24324a;min-height:45px}
-.primary{width:100%;min-height:51px;background:#3b66ed;color:white;border:0;border-radius:13px;font-weight:800;margin-top:16px}
-.secondary{border:1px solid #c3d2ec;background:#f6f8fe;color:#2853ab;border-radius:10px;padding:10px 13px}
-#status{min-height:25px;color:#3f62a9;font-size:13px;margin:10px 0 0}#results{display:none}
-.look{border:1px solid #e0e7f2;border-radius:13px;background:#fcfdff;padding:14px;margin:12px 0}
-.look h3{margin:0 0 8px;font-size:16px}.look p{margin:5px 0;font-size:14px}
-.note{font-size:13px;color:#62708a}.modalwrap{position:fixed;inset:0;z-index:5;display:none;align-items:center;justify-content:center;background:#07152ab8;padding:14px}
-.modalwrap.show{display:flex}.modal{background:white;padding:20px;border-radius:16px;width:min(100%,450px);max-height:90dvh;overflow:auto}
-.modalHead{display:flex;justify-content:space-between;align-items:center}.modalHead h2{margin:0}
-#close{border:0;background:#eef1f6;border-radius:8px;font-size:20px;width:38px;height:38px}
-.warning{background:#fff7e5;padding:10px;border-radius:10px;font-size:12px;color:#71501f}
-#version{display:block;width:100%;text-align:center;border:1px solid #dae4f5;border-radius:12px;padding:14px;margin-top:17px;background:#f4f7fb;font-size:21px;font-weight:800}
-#devmenu{display:none;padding:13px;background:#eaf1ff;border-radius:12px;margin-top:12px}#devmenu.show{display:block}
-#devmenu a{display:block;background:#265bc0;border-radius:10px;color:white;padding:12px;text-align:center;text-decoration:none;font-weight:750}
-footer{text-align:center;padding:5px 14px 27px;color:#8694a9;font-size:12px}
-@media(max-width:350px){.grid{grid-template-columns:1fr}section{padding:14px}}
-
-.photoActions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.photoActions button{min-height:50px}.previewBox{background:#f4f7fc;border:1px dashed #b7c8e2;border-radius:13px;min-height:150px;display:grid;place-items:center;padding:12px;text-align:center;margin-top:12px;overflow:hidden}.previewBox img{max-width:100%;max-height:360px;object-fit:contain;border-radius:10px}.cameraStage{display:none;margin-top:10px}.cameraStage video{width:100%;max-height:490px;object-fit:contain;background:#111;border-radius:13px}.cameraStage .photoActions{margin-top:9px}
-.settingsActions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.settingsActions button{min-height:47px}.linkBtn{display:block;text-align:center;background:#e9f0ff;color:#1a4fad;text-decoration:none;border-radius:11px;padding:12px;font-weight:700;margin:12px 0}
-.checkboxLine{font-size:13px;display:flex;gap:8px;align-items:flex-start;margin:12px 0}.checkboxLine input{margin-top:3px}.apiState{font-size:13px;min-height:23px;color:#2853ab;margin-top:9px;white-space:pre-wrap;overflow-wrap:anywhere}
-.rank{font-weight:800;color:#204bbb}.look button{margin-top:9px;width:100%}.fitResult img{width:100%;max-height:670px;object-fit:contain;border-radius:12px;background:#e6eaf2}.fitResult a{display:block;text-align:center;margin-top:12px}.tiny{font-size:12px;color:#63718b}
-#fitting[hidden],#results[hidden]{display:none!important}@media(max-width:360px){.photoActions{grid-template-columns:1fr}}
-</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#13234a"><meta name="color-scheme" content="light">
+<meta name="description" content="사진과 상황에 맞는 AI 코디 추천, 가상 피팅, 기록 갤러리">
+<title>푸른 AI 코디 V3</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
-<header><div><div><strong>푸른 AI 코디</strong><small>내 사진과 상황에 맞는 옷차림 제안</small></div><button id="settingsBtn" aria-label="설정 열기">⚙</button></div></header>
+<header><div class="head"><div class="brand">푸른 AI 코디 <span class="bubble">V3</span><small>옷은 새롭게, 내 모습은 그대로</small></div><div class="headBtns">
+<button id="installBtn" title="앱 설치" aria-label="스마트폰에 설치">⬇</button>
+<button id="historyBtn" title="내 기록" aria-label="내 기록 열기">▦</button>
+<button id="settingsBtn" title="설정" aria-label="설정 열기">⚙</button>
+</div></div></header>
 <main>
-<section><h1>오늘 어떤 코디가 좋을까요?</h1><p class="sub">사진은 선택 사항입니다. Gemini API 키가 없을 때는 예시 추천으로 화면을 미리 확인할 수 있습니다.</p></section>
-<section><h2>① 전신사진 선택</h2><p class="sub">우선 정면 전신사진 한 장으로 분석합니다. 휴대폰 카메라로 촬영하거나 갤러리에서 고르세요.</p>
-<div class="photoActions"><button id="takeCamera" class="secondary" type="button">📷 사진 촬영</button><button id="takeGallery" class="secondary" type="button">🖼 갤러리 선택</button></div>
-<input type="file" id="cameraFile" accept="image/*" capture="environment" hidden><input type="file" id="galleryFile" accept="image/*" hidden>
-<div class="cameraStage" id="cameraStage"><video id="cameraVideo" autoplay playsinline muted></video><div class="photoActions"><button id="captureNow" class="primary" type="button" style="margin:0">📷 이 장면 촬영</button><button id="cancelCamera" class="secondary" type="button">카메라 닫기</button></div></div>
-<div class="previewBox"><img id="preview" alt="선택한 전신사진" hidden><span id="photoHint" class="sub">선택한 사진이 여기에 나타납니다.</span></div>
-<button id="removePhoto" class="secondary" type="button" hidden style="margin-top:10px;width:100%">사진 지우기</button>
-<p class="tiny">사진은 이 앱 서버에 저장하지 않습니다. AI 추천이나 가상 피팅을 실행하면 사진이 Google Gemini API에 전송됩니다.</p></section>
-<section><h2>② 계절과 스타일</h2><div class="grid">
+<section class="panel" id="photoPanel">
+<h2>① 내 사진 등록</h2><p class="hint">전신사진 한 장은 기본입니다. 얼굴사진은 얼굴 표현 개선을 위해 선택적으로 등록하세요.</p>
+<div class="previewGrid">
+<div class="preview"><img id="portraitPreview" alt="전신사진" hidden><span id="portraitHint"><span class="emoji">🧍</span><br>전신사진</span></div>
+<div class="preview face"><img id="facePreview" alt="얼굴사진" hidden><span id="faceHint"><span class="emoji">🙂</span><br>얼굴사진<br>(선택)</span></div>
+</div>
+<div class="actions"><button class="btn primary" id="portraitCamera" type="button">📷 전신 촬영</button><button class="btn" id="portraitGallery" type="button">▧ 전신 갤러리</button></div>
+<div class="actions" style="margin-top:8px"><button class="btn gray" id="faceCamera" type="button">얼굴 촬영</button><button class="btn gray" id="faceGallery" type="button">얼굴 선택</button><button class="btn gray" id="clearPhoto" type="button">사진 지우기</button></div>
+<input id="portraitInput" type="file" accept="image/*" capture="environment"><input id="portraitGalleryInput" type="file" accept="image/*" hidden><input id="faceInput" type="file" accept="image/*" capture="user"><input id="faceGalleryInput" type="file" accept="image/*" hidden>
+<p id="photoStatus" role="status">기본 카메라에서 촬영을 마치면 이 앱으로 돌아옵니다.</p>
+</section>
+<section class="panel" id="choices">
+<h2>② 코디 조건</h2>
+<div class="cols">
 <label class="field">계절<select id="season"><option>봄</option><option>여름</option><option selected>가을</option><option>겨울</option></select></label>
-<label class="field">스타일<select id="style"><option>깔끔한 캐주얼</option><option>비즈니스</option><option>미니멀</option><option>편안한 데일리</option><option>스포티</option></select></label>
-<label class="field">상황<select id="occasion"><option>일상</option><option>출근·업무</option><option>모임</option><option>여행</option><option>데이트</option></select></label>
-<label class="field">날씨<select id="weather"><option>보통</option><option>더움</option><option>쌀쌀함</option><option>추움</option><option>비</option></select></label></div>
-<button id="go" class="primary">✨ 코디 3가지 추천받기</button><p id="status" aria-live="polite">설정에서 Gemini API 키를 입력하면 AI 추천을 시작할 수 있습니다.</p></section>
-<section id="results" hidden><h2 id="resultTitle">추천 코디 3가지</h2><div id="cards"></div><p id="resultNote" class="note"></p></section>
-<section id="fitting" hidden><h2>👕 선택한 코디 입어보기</h2><p id="fitStatus" class="sub"></p><div class="fitResult"><img id="fitImage" alt="AI가 생성한 가상 피팅 이미지"><a id="fitDownload" class="secondary" download="pureun-fashion-v2-fitting.png">이미지 저장</a></div><p class="tiny">AI가 생성한 예시 이미지입니다. 실제 제품의 치수·핏·색상을 보장하지 않습니다.</p></section>
+<label class="field">스타일<select id="style"><option>깔끔한 캐주얼</option><option>비즈니스</option><option>미니멀</option><option>정장</option><option>편안한 데일리</option><option>스포티</option></select></label>
+<label class="field">용도<select id="occasion"><option>일상</option><option>출근·업무</option><option>모임</option><option>여행</option><option>데이트</option></select></label>
+<label class="field">날씨<select id="weather"><option>보통</option><option>더움</option><option>쌀쌀함</option><option>추움</option><option>비</option></select></label>
+</div>
+<button id="recommend" class="btn primary full" style="margin-top:14px">✨ 코디 3가지 추천받기</button>
+<p class="hint">API 키를 등록하지 않으면 예시 추천이 표시됩니다. 실제 개인화 추천에는 Gemini API가 사용됩니다.</p>
+<p id="runStatus" role="status"></p>
+</section>
+<section class="panel" id="results" hidden>
+<h2>③ 나에게 어울리는 코디</h2><div id="looks"></div>
+<p class="muted" id="resultNote"></p>
+</section>
+<section class="panel" id="sharePanel" hidden>
+<h2>④ 구독 AI로 이미지 만들기 <span class="bubble">추가 API 비용 없음</span></h2>
+<p class="hint">선택한 코디를 이미지 생성용 지시문으로 정리합니다. 사진과 문장을 스마트폰의 공유 기능으로 전달하세요. 자동 첨부·자동 반환은 서비스마다 지원이 다릅니다.</p>
+<label class="field">선택한 코디<select id="shareLook"></select></label>
+<div class="actions" style="margin-top:10px"><button class="btn" id="shareFiles">📤 사진+지시문 공유</button><button class="btn" id="copyPrompt">📋 지시문 복사</button></div>
+<div class="actions" style="margin-top:8px"><button class="btn gray" data-open-ai="chatgpt">ChatGPT 열기</button><button class="btn gray" data-open-ai="gemini">Gemini 열기</button><button class="btn gray" data-open-ai="claude">Claude 열기</button></div>
+<p class="muted">Claude는 사진 생성 대신 코디 분석·프롬프트 보완 용도로 활용합니다. 사진·글이 자동 첨부되지 않으면 복사와 갤러리에서 첨부해주세요.</p>
+<label class="field">생성된 이미지 가져오기<input id="importResult" type="file" accept="image/*" hidden></label>
+<button class="btn full" id="importBtn" type="button">🖼 ChatGPT·Gemini 생성 이미지 가져오기</button>
+<p id="shareStatus" role="status"></p>
+</section>
+<section class="panel" id="fitting" hidden>
+<h2>⑤ 가상 피팅 결과</h2>
+<p id="fitStatus" role="status"></p>
+<img id="fitImg" alt="코디 가상 피팅" style="width:100%;max-height:560px;object-fit:contain;border-radius:12px;background:#f2f4f9">
+<div class="actions" style="margin-top:9px"><button class="btn primary" id="openEditor" type="button">배경 바꾸기</button><button class="btn" id="saveFit" type="button">이미지 저장</button></div>
+</section>
+<section class="panel" id="editorPanel" hidden>
+<h2>⑥ 배경 편집 <span class="bubble">변경 시 AI 과금 없음</span></h2>
+<p class="hint">배경 제거는 스마트폰 안에서 한 번만 처리합니다. 인터넷에서 무료 처리 모델을 최초 다운로드할 수 있습니다.</p>
+<div class="editor" id="editor"><div id="bgSolid" class="solid" style="background:#fff"></div><img id="bgImage" class="backgroundImg" alt="" hidden><img id="subjectImage" class="personImg" alt="인물"></div>
+<div class="bgChoices" id="bgColors"></div>
+<div class="actions"><button class="btn gray" id="chooseBackground" type="button">내 사진 배경</button><button class="btn gray" id="removeBg" type="button">✂️ 인물 배경 제거</button></div>
+<input type="file" id="backgroundInput" accept="image/*">
+<p id="bgStatus" role="status"></p>
+<div class="actions" style="margin-top:10px"><button id="exportComposite" class="btn primary" type="button">완성 사진 내보내기</button><button id="saveComposite" class="btn" type="button">앱 갤러리에 저장</button></div>
+</section>
+<section class="panel" id="galleryPanel" hidden>
+<div class="actions" style="align-items:center;justify-content:space-between"><h2>내 코디 기록</h2><button class="btn gray" id="closeHistory" type="button">닫기</button></div>
+<p class="hint">사진과 생성 결과는 이 기기의 브라우저 내부에 저장됩니다. 데이터 삭제나 기기 변경 시 없어질 수 있습니다.</p>
+<div class="gallery" id="historyGrid"></div>
+<div class="actions" style="margin-top:12px"><button class="btn" id="backupBtn">📦 기록 백업</button><button class="btn gray" id="restoreBtn">기록 복원</button></div><input type="file" id="restoreFile" accept="application/json">
+<p id="saveStatus" role="status"></p>
+</section>
+<div class="footer"><button id="version" type="button">푸른 AI 코디 · V3 · 버전 정보</button><div id="dev"><a class="link" href="https://github.com/lsc571-max/ai-fashion-stylist/upload/main" target="_blank" rel="noopener">GitHub HTML 업로드 화면</a><p class="muted">버전 5회 터치로 표시됩니다. 보안 인증은 아닙니다.</p></div></div>
 </main>
-<footer>푸른 AI 코디 · V2 · 사진은 앱 서버에 저장하지 않음</footer>
-<div class="modalwrap" id="backdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-<div class="modalHead"><h2 id="settingsTitle">설정</h2><button id="close" aria-label="설정 닫기">×</button></div>
-<a class="linkBtn" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">🔑 Gemini API 키 발급받기</a>
-<p><label class="field">Gemini API 키<input type="password" id="key" placeholder="Google AI Studio에서 복사한 키" autocomplete="off" spellcheck="false"></label></p>
-<label class="checkboxLine"><input type="checkbox" id="remember"><span>이 기기에 API 키 기억하기 (개인 기기에서만 사용)</span></label>
-<div class="settingsActions"><button class="secondary" id="saveKey" type="button">💾 저장하기</button><button class="secondary" id="testKey" type="button">🔗 연결 테스트</button></div>
-<p id="apiStatus" class="apiState" role="status" aria-live="polite">저장 후 연결 테스트를 눌러 실제 Gemini 응답을 확인하세요.</p>
-<p class="warning">API 키를 기기에 기억하도록 선택하면 브라우저 저장소에 평문으로 남습니다. 공용 기기에서는 선택하지 마세요. 공개 서비스는 서버에서 API 키를 관리해야 합니다. 테스트도 소량의 API 사용량이 발생할 수 있습니다.</p>
-<button id="clear" class="secondary" type="button" style="width:100%">저장된 API 키 지우기</button>
-<button id="version" type="button">V2<span class="sub" style="display:block;font-weight:400">앱 버전</span></button>
-<div id="devmenu"><strong>개발자 메뉴</strong><p class="sub">GitHub에 로그인한 후 코디 앱 파일을 업로드합니다.</p><a href="https://github.com/lsc571-max/ai-fashion-stylist/upload/main" target="_blank" rel="noopener noreferrer">GitHub HTML 업로드</a><p class="sub">버전 5회 터치는 숨김 메뉴일 뿐 보안 인증이 아닙니다.</p></div>
+<div class="overlay" id="settingsOverlay" role="presentation"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+<div class="top"><h2 id="settingsTitle">설정</h2><button id="closeSettings" type="button" aria-label="닫기">×</button></div>
+<a class="btn full" style="display:block;text-align:center;text-decoration:none" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">🔑 Gemini API 키 발급받기</a>
+<label class="field">Gemini API 키<input id="apiKey" type="password" autocomplete="off" placeholder="API 키 붙여넣기"></label>
+<label class="toggle"><input id="rememberKey" type="checkbox">이 기기에 키 기억하기 (개인 기기에서만)</label>
+<div class="actions"><button id="saveKey" class="btn">💾 저장하기</button><button id="testKey" class="btn">🔗 연결 테스트</button></div>
+<p id="apiStatus" role="status"></p>
+<button id="clearKey" class="btn gray full">저장된 키 지우기</button>
+<div class="divider"></div>
+<label class="field">유료 가상 피팅 이미지 모델<select id="imageModel"><option value="gemini-3.1-flash-lite-image">절약형 · Nano Banana 2 Lite</option><option value="gemini-3.1-flash-image">균형형 · Nano Banana 2</option><option value="gemini-3-pro-image">고급형 · Nano Banana Pro</option></select></label>
+<label class="field">예상 환율 (1달러당 원)<input id="fx" inputmode="numeric" type="number" value="1450" min="500" max="3000"></label>
+<div class="warn">API 유료 생성은 사용자가 확인한 뒤에만 호출합니다. 예상 비용은 1K 이미지 1장 출력 기준의 참고값이며 입력 토큰·세금·실제 환율 등이 더해질 수 있습니다. 모델 요금은 변경될 수 있습니다.</div>
+<div class="warn">이 기기에 키 기억하기는 브라우저에 암호화되지 않은 키를 남깁니다. 공용기기에서는 선택하지 마세요. 공개 서비스에서는 서버를 통해 키를 보호해야 합니다.</div>
 </div></div>
-<script>
-(function(){
-"use strict";
-const $=id=>document.getElementById(id);
-const TEXT_MODELS=["gemini-3.5-flash-lite","gemini-3.1-flash-lite"];
-const IMAGE_MODEL="gemini-3.1-flash-lite-image";
-const KEY_STORAGE="pureun-fashion-v2-key";
-let key="",photo="",photoSerial=0,model=TEXT_MODELS[0],busy=false,videoStream=null,selectedOutfits=[],demoMode=true,secretTaps=0,lastTap=0;
-const resultCache=new Map(),fitCache=new Map(),back=$("backdrop");
-function apiMessage(message,bad){$("apiStatus").textContent=message;$("apiStatus").style.color=bad?"#b02f3b":"#2853ab";}
-function status(message,bad){$("status").textContent=message;$("status").style.color=bad?"#b02f3b":"#2853ab";}
-function setBusy(id,on){$(id).disabled=on;}
-function showSettings(){back.classList.add("show");$("key").value=key;}
-function hideSettings(){back.classList.remove("show");}
-$("settingsBtn").onclick=showSettings;$("close").onclick=hideSettings;
-back.onclick=e=>{if(e.target===back)hideSettings();};
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){hideSettings();stopCamera();}});
-try{const saved=localStorage.getItem(KEY_STORAGE);if(saved){key=saved;$("key").value=saved;$("remember").checked=true;apiMessage("이 기기에 저장된 키를 불러왔습니다. 연결 테스트로 확인하세요.");}}catch(e){apiMessage("이 브라우저에서는 영구 저장이 제한될 수 있습니다.",true);}
-$("saveKey").onclick=()=>{
-const candidate=$("key").value.trim();
-if(!candidate){apiMessage("API 키를 입력한 다음 저장해 주세요.",true);return;}
-key=candidate;resultCache.clear();fitCache.clear();
-try{if($("remember").checked){localStorage.setItem(KEY_STORAGE,key);apiMessage("이 기기에 저장했습니다. 이제 연결 테스트를 눌러주세요.");}
-else{localStorage.removeItem(KEY_STORAGE);apiMessage("현재 탭 메모리에 저장했습니다. 새로고침하면 사라집니다. 연결 테스트를 눌러주세요.");}}
-catch(e){apiMessage("브라우저 저장이 차단됐습니다. 현재 탭에서는 사용할 수 있습니다.",true);}
-};
-$("clear").onclick=()=>{key="";$("key").value="";$("remember").checked=false;resultCache.clear();fitCache.clear();try{localStorage.removeItem(KEY_STORAGE);}catch(e){}apiMessage("키를 지웠습니다. 예시 코디를 사용할 수 있습니다.");};
-$("version").onclick=()=>{const now=Date.now();secretTaps=now-lastTap<1700?secretTaps+1:1;lastTap=now;if(secretTaps>=5){$("devmenu").classList.toggle("show");secretTaps=0;}};
-function explainError(err){
-if(err.name==="AbortError")return "요청 시간이 초과됐습니다. 인터넷 연결을 확인하고 다시 시도하세요.";
-const code=err.code;
-if(code===400)return "400 요청 오류: 사진 또는 API 요청 형식을 확인해야 합니다. "+err.message;
-if(code===401||code===403)return code+" 인증·권한 오류: API 키, 프로젝트 권한, 결제 설정을 확인하세요. "+err.message;
-if(code===404)return "404 모델 오류: 해당 API 키로 이 모델을 사용할 수 없거나 모델 경로가 변경됐습니다. "+err.message;
-if(code===429)return "429 사용량 제한: 할당량이나 과금 한도를 확인하세요. "+err.message;
-if(code===402)return "402 결제 오류: 이미지 생성 모델의 결제 프로젝트가 준비됐는지 확인하세요. "+err.message;
-return err.message||"알 수 없는 오류가 발생했습니다.";
-}
-async function request(modelName,body,ms){
-const controller=new AbortController(),t=setTimeout(()=>controller.abort(),ms||45000);
-try{
-const response=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(modelName)+":generateContent",{
-method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body),signal:controller.signal});
-const json=await response.json().catch(()=>({}));
-if(!response.ok){const er=new Error(String((json.error&&json.error.message)||"모델 응답 오류").slice(0,500));er.code=response.status;throw er;}
-return json;
-}finally{clearTimeout(t);}
-}
-function responseText(json){return ((json.candidates&&json.candidates[0]&&json.candidates[0].content&&json.candidates[0].content.parts)||[]).map(p=>p.text||"").join("");}
-async function callText(body,ms){
-const order=[model,...TEXT_MODELS.filter(m=>m!==model)],seen=new Set();let last;
-for(const candidate of order){if(seen.has(candidate))continue;seen.add(candidate);
-try{const json=await request(candidate,body,ms||45000);model=candidate;return json;}
-catch(e){last=e;if(e.code!==404)throw e;}}
-throw last||new Error("사용 가능한 텍스트 모델을 찾지 못했습니다.");
-}
-$("testKey").onclick=async()=>{
-if(!$("key").value.trim()){apiMessage("API 키를 먼저 입력하세요.",true);return;}
-if($("key").value.trim()!==key){apiMessage("입력한 API 키를 먼저 '저장하기'로 저장하세요.",true);return;}
-setBusy("testKey",true);apiMessage("Gemini에 간단한 실제 요청을 보내 연결 중입니다…");
-try{
-const json=await callText({contents:[{role:"user",parts:[{text:"연결 확인 테스트입니다. 한국어로 '연결 성공'이라는 문구를 답하세요."}]}],generationConfig:{maxOutputTokens:256,temperature:0}},30000);
-if(!responseText(json).trim())throw Error("응답이 비어 있습니다. 모델 한도 또는 응답 설정을 확인해 주세요.");
-apiMessage("✅ Gemini 연결 성공 · 사용 모델: "+model+" · 테스트 요청 1회 사용");
-}catch(e){apiMessage("❌ 연결 실패 · "+explainError(e),true);}
-finally{setBusy("testKey",false);}
-};
-const fileData=f=>new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(new Error("파일을 읽을 수 없습니다."));r.readAsDataURL(f);});
-const compress=url=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{try{const scale=Math.min(1,1024/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);const ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL("image/jpeg",.78));}catch(e){reject(e);}};img.onerror=()=>reject(new Error("이미지를 열 수 없습니다."));img.src=url;});
-async function acceptPhoto(file){
-if(!file)return;
-if(!file.type.startsWith("image/")||file.size>20*1024*1024){status("20MB 이하 이미지 파일만 선택할 수 있습니다.",true);return;}
-status("사진을 준비하고 있습니다…");
-try{const next=await compress(await fileData(file));setPhoto(next);status("전신사진이 준비됐습니다.");}catch(e){status(explainError(e),true);}
-}
-function setPhoto(src){
-photo=src;photoSerial++;resultCache.clear();fitCache.clear();selectedOutfits=[];$("results").hidden=true;$("fitting").hidden=true;
-$("preview").src=src;$("preview").hidden=false;$("photoHint").hidden=true;$("removePhoto").hidden=false;
-}
-$("galleryFile").onchange=e=>acceptPhoto(e.target.files&&e.target.files[0]);
-$("cameraFile").onchange=e=>acceptPhoto(e.target.files&&e.target.files[0]);
-$("takeGallery").onclick=()=>{$("galleryFile").value="";$("galleryFile").click();};
-$("takeCamera").onclick=async()=>{
-if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
-try{videoStream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:1920}}});$("cameraVideo").srcObject=videoStream;$("cameraStage").style.display="block";await $("cameraVideo").play();return;}
-catch(e){stopCamera();status("브라우저 카메라를 열지 못해 휴대폰 촬영 기능으로 전환합니다.");}
-}
-$("cameraFile").value="";$("cameraFile").click();
-};
-function stopCamera(){if(videoStream){videoStream.getTracks().forEach(t=>t.stop());videoStream=null;}$("cameraVideo").srcObject=null;$("cameraStage").style.display="none";}
-$("cancelCamera").onclick=stopCamera;
-$("captureNow").onclick=async()=>{
-const video=$("cameraVideo");
-if(!video.videoWidth){status("카메라 영상이 준비되지 않았습니다.",true);return;}
-try{const w=video.videoWidth,h=video.videoHeight,can=document.createElement("canvas");can.width=w;can.height=h;can.getContext("2d").drawImage(video,0,0,w,h);const reduced=await compress(can.toDataURL("image/jpeg",.86));setPhoto(reduced);stopCamera();status("사진 촬영이 완료됐습니다.");}catch(e){status(explainError(e),true);}
-};
-$("removePhoto").onclick=()=>{photo="";photoSerial++;resultCache.clear();fitCache.clear();selectedOutfits=[];$("results").hidden=true;$("fitting").hidden=true;$("preview").hidden=true;$("preview").removeAttribute("src");$("photoHint").hidden=false;$("removePhoto").hidden=true;status("사진을 지웠습니다.");};
-function makeEl(tag,content,cls){const x=document.createElement(tag);if(cls)x.className=cls;if(content!=null)x.textContent=String(content);return x;}
-function row(card,label,value){if(!value)return;const p=makeEl("p");p.append(makeEl("strong",label+"  "),document.createTextNode(String(value)));card.append(p);}
-function demoData(season,style,occasion,weather){
-const cold=season==="겨울"||weather==="쌀쌀함"||weather==="추움";
-return{outfits:[
-{name:"단정한 오피스 코디",top:"아이보리 니트",bottom:"네이비 슬랙스",outer:cold?"그레이 울 코트":"네이비 재킷",shoes:"브라운 로퍼",colors:"아이보리 · 네이비",why:"출근에 무난하고 단정한 색 조합입니다."},
-{name:"실용적인 캐주얼 코디",top:"연하늘색 셔츠",bottom:"차콜 팬츠",outer:cold?"네이비 가디건":"가벼운 블레이저",shoes:"흰색 스니커즈",colors:"블루 · 차콜",why:"활동성과 격식을 적절히 조화시킵니다."},
-{name:"편안한 대안 코디",top:"차분한 회색 스웨터",bottom:"진청 데님",outer:cold?"경량 패딩":"가벼운 재킷",shoes:"검정 스니커즈",colors:"그레이 · 인디고",why:"편안함을 우선한 대안입니다."}
-],note:season+" / "+style+" / "+occasion+" / "+weather+" 조건의 화면 예시입니다."};
-}
-function render(data,isDemo){
-if(!data||!Array.isArray(data.outfits)||data.outfits.length<3)throw Error("추천 데이터 형식이 올바르지 않습니다.");
-demoMode=isDemo;selectedOutfits=data.outfits.slice(0,3);$("resultTitle").textContent=isDemo?"예시 코디 1~3순위":"AI 추천 코디 1~3순위";$("cards").replaceChildren();$("fitting").hidden=true;
-selectedOutfits.forEach((look,i)=>{
-const card=makeEl("article",null,"look");
-card.append(makeEl("h3",(i+1)+"순위 · "+(i===0?"가장 추천":i===1?"차선 추천":"세 번째 추천"),"rank"));
-card.append(makeEl("p",look.name||"추천 코디"));
-row(card,"상의",look.top);row(card,"하의",look.bottom);row(card,"겉옷",look.outer);row(card,"신발",look.shoes);row(card,"색 조합",look.colors);row(card,"추천 이유",look.why);
-const b=makeEl("button","👕 이 코디 입어보기 (이미지 생성 비용 발생)","secondary");b.type="button";b.disabled=isDemo;b.title=isDemo?"실제 AI 추천과 전신사진이 필요합니다.":"";
-b.onclick=()=>generateFitting(i);card.append(b);$("cards").append(card);
-});
-$("resultNote").textContent=(data.note||"")+(isDemo?" · AI 분석 결과가 아닌 예시입니다. 가상 피팅은 API 키 연결 후 사용할 수 있습니다.":" · 1~3순위는 AI의 주관적 추천으로 정답이나 착용 적합도를 보장하지 않습니다.");
-$("results").hidden=false;$("results").style.display="block";$("results").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function getOptions(){return[$("season").value,$("style").value,$("occasion").value,$("weather").value];}
-function parseJSON(s){try{return JSON.parse(s);}catch(e){const a=s.indexOf("{"),b=s.lastIndexOf("}");if(a>=0&&b>a)return JSON.parse(s.slice(a,b+1));throw new Error("AI 추천 결과를 JSON으로 해석하지 못했습니다.");}}
-$("go").onclick=async()=>{
-if(busy)return;busy=true;$("go").disabled=true;$("go").textContent="코디 추천 중…";
-const [season,style,occasion,weather]=getOptions(),ck=[photoSerial,season,style,occasion,weather,key?"ai:"+model:"demo"].join("|");
-status(key?"실제 Gemini AI로 코디를 추천하고 있습니다.":"예시 코디를 표시합니다.");
-try{let data=resultCache.get(ck);
-if(!data){if(!key){data=demoData(season,style,occasion,weather);}
-else{
-const prompt="당신은 실용적인 한국어 패션 스타일리스트입니다. 계절 "+season+", 스타일 "+style+", 상황 "+occasion+", 날씨 "+weather+"에 적합한 현실적인 옷차림 3개를 종합 적합도 순서대로 1~3순위로 추천하세요. 각 스타일의 이름과 상의, 하의, 겉옷, 신발, 색상, 추천 이유를 간결하게 제시하세요. "+
-(photo?"첨부한 전신사진의 관찰 가능한 옷차림과 색상만 참고하세요. 체중·나이·성별·건강 상태를 추측하지 마세요. ":"사진이 없으므로 일반적인 코디를 제안하세요. ")+
-"반드시 JSON 객체만 답하세요. 정확한 속성 구조는 {\"outfits\":[{\"name\":\"\",\"top\":\"\",\"bottom\":\"\",\"outer\":\"\",\"shoes\":\"\",\"colors\":\"\",\"why\":\"\"},{\"name\":\"\",\"top\":\"\",\"bottom\":\"\",\"outer\":\"\",\"shoes\":\"\",\"colors\":\"\",\"why\":\"\"},{\"name\":\"\",\"top\":\"\",\"bottom\":\"\",\"outer\":\"\",\"shoes\":\"\",\"colors\":\"\",\"why\":\"\"}],\"note\":\"\"} 입니다.";
-const parts=[{text:prompt}];if(photo)parts.push({inlineData:{mimeType:"image/jpeg",data:photo.split(",")[1]}});
-const response=await callText({contents:[{role:"user",parts}],generationConfig:{responseMimeType:"application/json",temperature:.5,maxOutputTokens:2000}},60000);
-data=parseJSON(responseText(response));
-}
-resultCache.set(ck,data);
-}
-render(data,!key);
-status(key?"✅ AI 코디 추천 완료 · 사용 모델: "+model:"예시 코디입니다. 실제 AI 추천은 설정에서 API 키 저장 후 사용하세요.");
-}catch(e){status(explainError(e),true);}
-finally{busy=false;$("go").disabled=false;$("go").textContent="✨ 코디 3가지 추천받기";}
-};
-async function generateFitting(index){
-if(!key){status("설정에서 API 키를 저장하세요.",true);return;}
-if(!photo){status("가상 피팅에는 전신사진이 필요합니다. 먼저 사진을 선택하세요.",true);window.scrollTo({top:0,behavior:"smooth"});return;}
-if(busy)return;
-const look=selectedOutfits[index];if(!look)return;
-const ck=[photoSerial,index,look.name,look.top,look.bottom,look.outer,look.shoes].join("|");
-let img=fitCache.get(ck);
-if(!img){
-const yes=confirm("선택한 "+(index+1)+"순위 코디로 가상 피팅 이미지 1장을 생성할까요?\n\nGemini 3.1 Flash Lite Image는 무료 등급이 제공되지 않습니다. 1K 이미지 출력 기준 약 US$0.0336에 입력 토큰 등의 비용이 추가됩니다.\n\n결제 설정이 안 되어 있으면 요청이 실패할 수 있습니다. 확인을 누르면 API를 호출합니다.");
-if(!yes)return;
-}
-busy=true;$("fitting").hidden=false;$("fitStatus").textContent="가상 피팅 이미지를 준비하고 있습니다…";$("fitImage").hidden=true;$("fitDownload").hidden=true;$("fitting").scrollIntoView({behavior:"smooth",block:"start"});
-try{
-if(!img){
-const prompt="Edit the provided full-body photo to show the SAME person realistically wearing this specific outfit. Keep the person's face, hairstyle, posture, visible body proportions, hands, lighting, and background as faithful to the source as possible. Change ONLY the clothing and shoes when visible. Outfit: top "+(look.top||"")+", bottoms "+(look.bottom||"")+", outerwear "+(look.outer||"")+", shoes "+(look.shoes||"")+", colors "+(look.colors||"")+". Photorealistic, modest, natural fabric folds, do not add logos, text, or unrelated objects. Generate one complete full-body portrait image.";
-const json=await request(IMAGE_MODEL,{contents:[{role:"user",parts:[{text:prompt},{inlineData:{mimeType:"image/jpeg",data:photo.split(",")[1]}}]}],generationConfig:{responseModalities:["TEXT","IMAGE"],imageConfig:{aspectRatio:"3:4",imageSize:"1K"}}},120000);
-const parts=(json.candidates&&json.candidates[0]&&json.candidates[0].content&&json.candidates[0].content.parts)||[];
-const part=parts.find(p=>p.inlineData&&p.inlineData.data);if(!part)throw Error("이미지 생성 응답이 없습니다. 유료 API 권한과 모델 사용 가능 여부를 확인해 주세요.");
-img="data:"+(part.inlineData.mimeType||"image/png")+";base64,"+part.inlineData.data;fitCache.set(ck,img);
-}
-$("fitImage").src=img;$("fitImage").hidden=false;$("fitDownload").href=img;$("fitDownload").hidden=false;$("fitStatus").textContent="✅ "+(index+1)+"순위 코디 가상 피팅 이미지입니다. 실제 핏과 다를 수 있습니다.";
-}catch(e){$("fitStatus").textContent="❌ 가상 피팅 실패 · "+explainError(e);}
-finally{busy=false;}
-}
-})();
-</script>
+<div id="notice" role="status"></div>
+<script src="app.js?v=3" defer></script>
 </body></html>
