@@ -54,7 +54,7 @@ const imageLoaded=url=>new Promise((ok,no)=>{const img=new Image();img.onload=()
 async function compress(source,max=1280,quality=.82){const img=await imageLoaded(source);const ratio=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.max(1,Math.round(img.width*ratio));c.height=Math.max(1,Math.round(img.height*ratio));const ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);return c.toDataURL("image/jpeg",quality)}
 async function accept(file,type){if(!file)return;if(!file.type.startsWith("image/")||file.size>25*1024*1024){msg("photoStatus","이미지는 25MB 이하로 선택하세요.",true);return}
 msg("photoStatus","사진 최적화 중...");
-try{const url=await compress(await dataURL(file),type==="face"?720:1280);state[type]=url;showPhotos();if(type==="portrait"){$("results").hidden=true;$("sharePanel").hidden=true;state.outfits=[];state.fit="";}
+try{const url=await compress(await dataURL(file),type==="face"?720:1280);state[type]=url;showPhotos();if(type==="portrait"||type==="face"){$("results").hidden=true;$("sharePanel").hidden=true;state.outfits=[];state.fit="";}
 await saveProfile();msg("photoStatus",type==="face"?"얼굴사진을 등록했습니다.":"전신사진을 등록했습니다.");}catch(e){msg("photoStatus",explain(e),true)}}
 $("portraitCamera").onclick=()=>$("portraitInput").click();
 $("portraitGallery").onclick=()=>$("portraitGalleryInput").click();
@@ -107,7 +107,7 @@ else{await navigator.clipboard.writeText(prompt);msg("shareStatus","공유가 �
 const services={chatgpt:"https://chatgpt.com/",gemini:"https://gemini.google.com/app",claude:"https://claude.ai/new"};
 document.querySelectorAll("[data-open-ai]").forEach(b=>b.onclick=()=>{const name=b.dataset.openAi;window.open(services[name],"_blank","noopener");msg("shareStatus","AI 서비스를 열었습니다. 지시문과 사진이 자동으로 붙지 않았다면 공유 또는 복사해서 첨부하세요.")});
 $("importBtn").onclick=()=>$("importResult").click();
-$("importResult").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{state.fit=await compress(await dataURL(f),1400,.9);showFit("구독 AI에서 가져온 이미지");await saveFittingRecord("구독 AI 가져오기");msg("shareStatus","이미지를 가져왔습니다. 기록에 저장하고 배경 편집도 가능합니다.")}catch(x){msg("shareStatus",explain(x),true)}e.target.value=""};
+$("importResult").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{state.cost=0;state.fit=await compress(await dataURL(f),1400,.9);showFit("구독 AI에서 가져온 이미지");await saveFittingRecord("구독 AI 가져오기");msg("shareStatus","이미지를 가져왔습니다. 기록에 저장하고 배경 편집도 가능합니다.")}catch(x){msg("shareStatus",explain(x),true)}e.target.value=""};
 const fx=()=>Math.max(500,Math.min(3000,Number($("fx").value)||1450));
 function price(){const usd=PRICES[$("imageModel").value]||0;return {usd,won:Math.round(usd*fx())}}
 async function fit(index){if(!state.key){notify("Gemini API 키를 먼저 저장하세요.");return}if(!state.portrait){notify("가상 피팅은 전신사진이 필요합니다.");return}if(state.busy)return;
@@ -118,9 +118,13 @@ const parts=[{text:prompt},{inlineData:{mimeType:"image/jpeg",data:state.portrai
 const result=await request($("imageModel").value,{contents:[{role:"user",parts}],generationConfig:{responseModalities:["TEXT","IMAGE"],imageConfig:{aspectRatio:"3:4",imageSize:"1K"}}},120000);
 const ip=result.candidates?.[0]?.content?.parts?.find(p=>p.inlineData?.data);
 if(!ip)throw Error("이미지 결과가 없습니다. 모델 권한 및 결제 설정을 확인하세요.");
-state.fit="data:"+(ip.inlineData.mimeType||"image/png")+";base64,"+ip.inlineData.data;state.cost=amount.won;showFit("Gemini API 생성 결과");
-await saveFittingRecord("Gemini API · "+$("imageModel").value);
-const u=result.usageMetadata;msg("runStatus","✅ 이미지 생성 완료 · 출력 기본 예상 "+amount.won+"원 + 입력 요금 별도"+(u?" · 사용 토큰 "+(u.totalTokenCount??"확인 불가"):""));
+state.fit="data:"+(ip.inlineData.mimeType||"image/png")+";base64,"+ip.inlineData.data;
+const u=result.usageMetadata;
+const inputRate={"gemini-3.1-flash-lite-image":.25,"gemini-3.1-flash-image":.50,"gemini-3-pro-image":2}[$("imageModel").value]||0;
+const inputUSD=Number.isFinite(Number(u?.promptTokenCount))?Number(u.promptTokenCount)*inputRate/1000000:0;
+state.cost=Math.round((amount.usd+inputUSD)*fx());
+showFit("Gemini API 생성 결과");await saveFittingRecord("Gemini API · "+$("imageModel").value);
+msg("runStatus","✅ 이미지 생성 완료 · 예상 "+state.cost+"원 (이미지 출력+입력 토큰 추정, 기타 출력·세금 제외)"+(u?" · 총 사용 토큰 "+(u.totalTokenCount??"확인 불가"):""));
 }catch(e){msg("runStatus","❌ 이미지 생성 실패: "+explain(e),true);notify("실패 시 자동 재시도하지 않습니다. 중복 과금을 막기 위해 먼저 오류를 확인하세요.")}
 finally{busy(false)}}
 function showFit(title){$("fitting").hidden=false;$("fitImg").src=state.fit;msg("fitStatus",title);$("fitting").scrollIntoView({behavior:"smooth",block:"start"});}
